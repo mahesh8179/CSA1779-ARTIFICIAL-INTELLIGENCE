@@ -1,7 +1,7 @@
 print("k.mahesh")
 print("192110349")
 def pour(jug1, jug2):
-    max1, max2, fill = 5, 7, 4
+    max1, max2, fill = 3, 5, 2
     print("%d\t%d" % (jug1, jug2))
     if jug2 == fill:
         return

@@ -1,54 +1,42 @@
 print("k.mahesh")
 print("192110349")
 print("CRIPT ARITHMETIC")
-def isSolvable(words, result):
-    mp = [-1]*(26)
-    used = [0]*(10)
-    Hash = [0]*(26)
-    CharAtfront = [0]*(26)
-    uniq = ""
-    for word in range(len(words)):
-        for i in range(len(words[word])):
-            ch = words[word][i]
-            Hash[ord(ch) - ord('A')] += pow(10, len(words[word]) - i - 1)
-            if mp[ord(ch) - ord('A')] == -1:
-                mp[ord(ch) - ord('A')] = 0
-                uniq += str(ch)
-            if i == 0 and len(words[word]) > 1:
-                CharAtfront[ord(ch) - ord('A')] = 1
-    for i in range(len(result)):
-        ch = result[i]
-        Hash[ord(ch) - ord('A')] -= pow(10, len(result) - i - 1)
-        if mp[ord(ch) - ord('A')] == -1:
-            mp[ord(ch) - ord('A')] = 0
-            uniq += str(ch)
-        if i == 0 and len(result) > 1:
-            CharAtfront[ord(ch) - ord('A')] = 1
-    mp = [-1]*(26)
-    return True
-def solve(words, i, S, mp, used, Hash, CharAtfront):
-    # If i is word.length
-    if i == len(words):
-        return S == 0
-    ch = words[i]
-    val = mp[ord(words[i]) - ord('A')]
-    if val != -1:
-        return solve(words, i + 1, S + val * Hash[ord(ch) - ord('A')], mp, used, Hash, CharAtfront)
-    x = False
-    for l in range(10):
-        if CharAtfront[ord(ch) - ord('A')] == 1 and l == 0:
-            continue
-        if used[l] == 1:
-            continue
-        mp[ord(ch) - ord('A')] = l
-        used[l] = 1
-        x |= solve(words, i + 1, S + l * Hash[ord(ch) - ord('A')], mp, used, Hash, CharAtfront)
-        mp[ord(ch) - ord('A')] = -1
-        used[l] = 0
-    return x
-arr = [ "SIX", "SEVEN", "SEVEN" ]
-S = "TWENTY"
-if isSolvable(arr, S):
-    print("Yes")
+from itertools import permutations
+
+def is_solution_valid(mapping):
+    s = mapping['S']
+    e = mapping['E']
+    n = mapping['N']
+    d = mapping['D']
+    m = mapping['M']
+    o = mapping['O']
+    r = mapping['R']
+    y = mapping['Y']
+    
+    send = s * 1000 + e * 100 + n * 10 + d
+    more = m * 1000 + o * 100 + r * 10 + e
+    money = m * 10000 + o * 1000 + n * 100 + e * 10 + y
+    
+    return send + more == money
+
+def solve_cryptarithmetic():
+    letters = set('SENDMORY')
+    digits = range(10)
+    
+    for perm in permutations(digits, len(letters)):
+        mapping = dict(zip(letters, perm))
+        if is_solution_valid(mapping):
+            return mapping
+    
+    return None
+
+solution = solve_cryptarithmetic()
+
+if solution:
+    print("Cryptarithmetic Puzzle Solution:")
+    for letter, digit in solution.items():
+        print(f"{letter}: {digit}")
 else:
-    print("No")
+    print("No solution found.")
+
+
